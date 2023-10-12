@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#6200EA</color>
+    <color name="colorPrimaryDark">#5502C8</color>
+    <color name="colorAccent">#9D46FF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="lightGray">#AAB7B8</color>
+    <color name="purple">#CD38CE</color>
+    <color name="lightMediumGray">#BFC9CA </color>
+    <color name="darker">#0C040C </color>
+    <color name="darkGray">#808B96</color>
+    <color name="red">#E8121F </color>
+    <color name="yellow">#E4F514</color>
+    <color name="green">#30F514</color>
+    <color name="mediumGray">#BFC9CA</color>
+    <color name="dark">#313C44</color>
+
+
+    // Custom Chip Style
+    <color name="checkedChipBackgroundColor">#206200EA</color>
+    <color name="chipBackgroundColor">@color/lightGray</color>
+    <color name="checkedChipTextColor">@color/colorPrimary</color>
+    <color name="chipTextColor">@color/darkGray</color>
+
+</resources>
