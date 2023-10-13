@@ -2,16 +2,14 @@ package com.example.foody.ui.fragments.recipes
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,12 +22,12 @@ import com.example.foody.util.observeOnce
 import com.example.foody.viewmodels.MainViewModel
 import com.example.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import com.example.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
-import com.example.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
 
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class RecipesFragment : Fragment() {
 
     private val args by navArgs<RecipesFragmentArgs>()
@@ -54,15 +52,7 @@ class RecipesFragment : Fragment() {
         Log.i("RecipesFragment", "onCreateView")
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
-        /*recyclerView = view?.findViewById(R.id.rv_recipes)
-        loader = view?.findViewById(R.id.loader)
-        setupRecyclerView()
-        //requestApiData()
-        readDatabase()
 
-        binding.recipesFab.setOnClickListener{
-            findNavController().navigate(R.id.action_recipiesFragment_to_recipesBottomSheet)
-        }*/
         return binding.root
     }
 
@@ -138,17 +128,7 @@ class RecipesFragment : Fragment() {
         }
     }
 
-    /* private fun applyQueries(): HashMap<String, String> {
-         val queries: HashMap<String, String> = HashMap()
-         queries["number"] = DEFAULT_RECIPES_NUMBER
-         queries["apiKey"] = API_KEY
-         queries["type"] = DEFAULT_MEAL_TYPE
-         queries["diet"] = DEFAULT_DIET_TYPE
-         queries["addRecipeInformation"] = "true"
-         queries["fillIngredients"] = "true"
 
-         return queries
-     }*/
 
 
     private fun hideLoader() {
