@@ -14,62 +14,56 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foody.viewmodels.MainViewModel
 import com.example.foody.R
 import com.example.foody.adapters.RecipesAdapter
 import com.example.foody.databinding.FragmentRecipesBinding
-import com.example.foody.util.Constants
-import com.example.foody.util.Constants.Companion.API_KEY
-import com.example.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
-import com.example.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
-import com.example.foody.util.Constants.Companion.DEFAULT_RECIPES_NUMBER
 import com.example.foody.util.NetworkResult
 import com.example.foody.util.observeOnce
+import com.example.foody.viewmodels.MainViewModel
 import com.example.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.example.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
+import com.example.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
+
 
 @AndroidEntryPoint
 class RecipesFragment : Fragment() {
 
-    private  var _binding : FragmentRecipesBinding? = null
+    private val args by navArgs<RecipesFragmentArgs>()
+    private var _binding: FragmentRecipesBinding? = null
     private val binding get() = _binding!!
-
-
-    //private lateinit var mainViewModel: MainViewModel
-    //private lateinit var recipesViewModel: RecipesViewModel
     private val mAdapter by lazy { RecipesAdapter() }
+
     //private lateinit var mView: View
     private var recyclerView: RecyclerView? = null
 
     private var loader: ProgressBar? = null
-    private val mainViewModel : MainViewModel by viewModels()
-    private val recipesViewModel : RecipesViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    private val recipesViewModel: RecipesViewModel by viewModels()
 
-    //override fun onCreate(savedInstanceState: Bundle?) {
-      //  super.onCreate(savedInstanceState)
-        //mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        //recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
-    //}
 
-   // private var loader: ProgressBar? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
-       Log.i("RecipesFragment", "onCreateView")
+        Log.i("RecipesFragment", "onCreateView")
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
+        /*recyclerView = view?.findViewById(R.id.rv_recipes)
+        loader = view?.findViewById(R.id.loader)
+        setupRecyclerView()
+        //requestApiData()
+        readDatabase()
 
-
-       binding.recipesFab.setOnClickListener {
-           findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
-       }
+        binding.recipesFab.setOnClickListener{
+            findNavController().navigate(R.id.action_recipiesFragment_to_recipesBottomSheet)
+        }*/
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,20 +71,23 @@ class RecipesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rv_recipes)
         loader = view.findViewById(R.id.loader)
         setupRecyclerView()
+        //requestApiData()
         readDatabase()
 
+        binding.recipesFab.setOnClickListener{
+            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+        }
     }
+
     private fun setupRecyclerView() {
         val adapter = mAdapter
         recyclerView?.adapter = adapter
-        //recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        //showLoaderEffect()
     }
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observe(viewLifecycleOwner, { database ->
-                if (database.isEmpty()) {
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     database.getOrNull(0)?.results?.let { mAdapter.setData(it) }
                     hideLoader()
                 } else {
@@ -101,24 +98,31 @@ class RecipesFragment : Fragment() {
     }
 
     private fun requestApiData() {
+        Log.d("RecipesFragment", "readDatabase caled!")
         mainViewModel.getRecipes(recipesViewModel.applyQueries())
+        //mainViewModel.getRecipes(applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            Log.i("RECIPE DATA RESPONSE:", response.toString())
+            when (response) {
                 is NetworkResult.Success -> {
                     hideLoader()
                     response.data?.let { mAdapter.setData(it) }
                 }
+
                 is NetworkResult.Error -> {
                     hideLoader()
+                    loadDataFromCache()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                is NetworkResult.Loading ->{
+
+                is NetworkResult.Loading -> {
                     showLoaderEffect()
                 }
+
             }
         })
     }
@@ -134,29 +138,29 @@ class RecipesFragment : Fragment() {
         }
     }
 
-  // private fun applyQueries():HashMap<String,String>{
-       // val queries: HashMap<String,String> =  HashMap()
-        //queries["number"] = DEFAULT_RECIPES_NUMBER
-        //queries["apiKey"] = API_KEY
-        //queries["type"] = DEFAULT_MEAL_TYPE
-        //queries["diet"] = DEFAULT_DIET_TYPE
-        //queries["addRecipeInformation"] = "true"
-        //queries["fillIngredients"] = "true"
+    /* private fun applyQueries(): HashMap<String, String> {
+         val queries: HashMap<String, String> = HashMap()
+         queries["number"] = DEFAULT_RECIPES_NUMBER
+         queries["apiKey"] = API_KEY
+         queries["type"] = DEFAULT_MEAL_TYPE
+         queries["diet"] = DEFAULT_DIET_TYPE
+         queries["addRecipeInformation"] = "true"
+         queries["fillIngredients"] = "true"
 
-        //return queries
+         return queries
+     }*/
 
-  //  }
-    //
 
-    private fun hideLoader(){
+    private fun hideLoader() {
         loader?.isVisible = false
     }
+
     private fun showLoaderEffect() {
         loader?.isVisible = true
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        _binding =null
     }
 }

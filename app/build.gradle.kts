@@ -58,7 +58,6 @@ android {
 }
 
 dependencies {
-
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -68,7 +67,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
 
-    //Room Components
     implementation("androidx.room:room-common:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
     implementation ("androidx.room:room-runtime:2.5.2")
@@ -78,16 +76,13 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    //Data binding
-    kapt("com.android.data-binding:compiler:3.5.0")
-    kapt("androidx.data-binding:data-binding-common:8.1.2")
-
     //daggerhilt
-    implementation ("com.google.dagger:hilt-android:2.28-alpha")
-    kapt ("com.google.dagger:hilt-android-compiler:2.28-alpha")
+    implementation ("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02")
     //kapt ("androidx.hilt:hilt-compiler:1.0.0-alpha02")
+
 
     implementation ("androidx.recyclerview:recyclerview:1.1.0")
 
@@ -97,24 +92,10 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-
-    // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0-alpha01")
-
-    //Recyclerview
-    implementation("androidx.recyclerview:recyclerview:1.3.1")
 
     // Gson
     implementation ("com.google.code.gson:gson:2.9.0")
     implementation ("org.jsoup:jsoup:1.13.1")
-
-    //RetroFit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
-
-    //Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
 }
